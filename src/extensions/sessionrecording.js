@@ -45,8 +45,10 @@ export class SessionRecording {
         if (!this.captureStarted) {
             return
         }
-        this.rrwebStopper()
-        this.rrwebStopper = null
+        if (this.rrwebStopper) {
+            this.rrwebStopper()
+            this.rrwebStopper = null
+        }
         this.captureStarted = false
     }
 
@@ -61,6 +63,9 @@ export class SessionRecording {
     }
 
     _onScriptLoaded() {
+        if (!this.captureStarted) {
+            return
+        }
         // rrweb config info: https://github.com/rrweb-io/rrweb/blob/7d5d0033258d6c29599fb08412202d9a2c7b9413/src/record/index.ts#L28
         this.rrwebStopper = window.rrweb.record({
             emit: (data) => {

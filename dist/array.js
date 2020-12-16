@@ -2205,17 +2205,17 @@ parcelRequire = (function (e, r, t, n) {
                 Object.defineProperty(exports, '__esModule', { value: !0 }), (exports.SessionRecording = void 0)
                 var e = require('../autocapture-utils'),
                     t = require('../utils'),
-                    n = require('../posthog-persistence'),
-                    i = s(require('./sessionid')),
-                    r = s(require('../config'))
+                    r = require('../posthog-persistence'),
+                    n = s(require('./sessionid')),
+                    i = s(require('../config'))
                 function s(e) {
                     return e && e.__esModule ? e : { default: e }
                 }
-                function o(e, t, n) {
+                function o(e, t, r) {
                     return (
                         t in e
-                            ? Object.defineProperty(e, t, { value: n, enumerable: !0, configurable: !0, writable: !0 })
-                            : (e[t] = n),
+                            ? Object.defineProperty(e, t, { value: r, enumerable: !0, configurable: !0, writable: !0 })
+                            : (e[t] = r),
                         e
                     )
                 }
@@ -2223,16 +2223,16 @@ parcelRequire = (function (e, r, t, n) {
                     if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function')
                 }
                 function c(e, t) {
-                    for (var n = 0; n < t.length; n++) {
-                        var i = t[n]
-                        ;(i.enumerable = i.enumerable || !1),
-                            (i.configurable = !0),
-                            'value' in i && (i.writable = !0),
-                            Object.defineProperty(e, i.key, i)
+                    for (var r = 0; r < t.length; r++) {
+                        var n = t[r]
+                        ;(n.enumerable = n.enumerable || !1),
+                            (n.configurable = !0),
+                            'value' in n && (n.writable = !0),
+                            Object.defineProperty(e, n.key, n)
                     }
                 }
-                function u(e, t, n) {
-                    return t && c(e.prototype, t), n && c(e, n), e
+                function u(e, t, r) {
+                    return t && c(e.prototype, t), r && c(e, r), e
                 }
                 var p = '/e/',
                     d = (function () {
@@ -2250,7 +2250,7 @@ parcelRequire = (function (e, r, t, n) {
                                 {
                                     key: 'startRecordingIfEnabled',
                                     value: function () {
-                                        this.instance.get_property(n.SESSION_RECORDING_ENABLED) && this._startCapture()
+                                        this.instance.get_property(r.SESSION_RECORDING_ENABLED) && this._startCapture()
                                     },
                                 },
                                 {
@@ -2258,7 +2258,7 @@ parcelRequire = (function (e, r, t, n) {
                                     value: function (e) {
                                         this.instance.persistence &&
                                             this.instance.persistence.register(
-                                                o({}, n.SESSION_RECORDING_ENABLED, !!e.sessionRecording)
+                                                o({}, r.SESSION_RECORDING_ENABLED, !!e.sessionRecording)
                                             ),
                                             e.sessionRecording &&
                                                 (e.sessionRecording.endpoint &&
@@ -2281,8 +2281,7 @@ parcelRequire = (function (e, r, t, n) {
                                     key: 'stopRecording',
                                     value: function () {
                                         this.captureStarted &&
-                                            (this.rrwebStopper(),
-                                            (this.rrwebStopper = null),
+                                            (this.rrwebStopper && (this.rrwebStopper(), (this.rrwebStopper = null)),
                                             (this.captureStarted = !1))
                                     },
                                 },
@@ -2295,7 +2294,7 @@ parcelRequire = (function (e, r, t, n) {
                                             (0, e.loadScript)(
                                                 this.instance.get_config('api_host') +
                                                     '/static/recorder.js?v=' +
-                                                    r.default.LIB_VERSION,
+                                                    i.default.LIB_VERSION,
                                                 t._.bind(this._onScriptLoaded, this)
                                             ))
                                     },
@@ -2304,25 +2303,29 @@ parcelRequire = (function (e, r, t, n) {
                                     key: '_onScriptLoaded',
                                     value: function () {
                                         var e = this
-                                        ;(this.rrwebStopper = window.rrweb.record({
-                                            emit: function (t) {
-                                                var n = {
-                                                    $snapshot_data: t,
-                                                    $session_id: (0, i.default)(e.instance.persistence, t.timestamp),
-                                                }
-                                                e.instance._captureMetrics.incr('rrweb-record'),
-                                                    e.instance._captureMetrics.incr('rrweb-record-'.concat(t.type)),
-                                                    e.emit ? e._captureSnapshot(n) : e.snapshots.push(n)
-                                            },
-                                            blockClass: 'ph-no-capture',
-                                            ignoreClass: 'ph-ignore-input',
-                                        })),
+                                        this.captureStarted &&
+                                            ((this.rrwebStopper = window.rrweb.record({
+                                                emit: function (t) {
+                                                    var r = {
+                                                        $snapshot_data: t,
+                                                        $session_id: (0, n.default)(
+                                                            e.instance.persistence,
+                                                            t.timestamp
+                                                        ),
+                                                    }
+                                                    e.instance._captureMetrics.incr('rrweb-record'),
+                                                        e.instance._captureMetrics.incr('rrweb-record-'.concat(t.type)),
+                                                        e.emit ? e._captureSnapshot(r) : e.snapshots.push(r)
+                                                },
+                                                blockClass: 'ph-no-capture',
+                                                ignoreClass: 'ph-ignore-input',
+                                            })),
                                             this.instance._addCaptureHook(function (e) {
                                                 '$pageview' === e &&
                                                     window.rrweb.record.addCustomEvent('$pageview', {
                                                         href: window.location.href,
                                                     })
-                                            })
+                                            }))
                                     },
                                 },
                                 {
